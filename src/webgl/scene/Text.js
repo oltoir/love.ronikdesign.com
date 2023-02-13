@@ -1,18 +1,18 @@
-const { assets } = require ('../../context');
+const { assets } = require("../../context");
 
-const LiveShaderMaterial = require('../materials/LiveShaderMaterial');
-const honeyShader = require('../shaders/honey.shader');
-const animate = require('@jam3/gsap-promise');
-const triangleArea = require('../../util/triangulate');
-const colors = require('../../constants/colors');
+const LiveShaderMaterial = require("../materials/LiveShaderMaterial");
+const honeyShader = require("../shaders/honey.shader");
+const animate = require("@jam3/gsap-promise");
+const triangleArea = require("../../util/triangulate");
+const colors = require("../../constants/colors");
 
 // add font to preloader
 const introFont = assets.queue({
-  url: 'assets/fonts/intro-black.typeface.json'
+  url: "assets/fonts/intro-black.typeface.json",
 });
 
 module.exports = class Text extends THREE.Object3D {
-  constructor (color, text = 'ronik', position = [0, 0, 0], delay = 0) {
+  constructor(color, text = "Aisha", position = [0, 0, 0], delay = 0) {
     super();
 
     // retrieve font
@@ -20,7 +20,7 @@ module.exports = class Text extends THREE.Object3D {
     this.font = new THREE.Font(font);
 
     this.text = text;
-    this.typeface = 'intro-black';
+    this.typeface = "intro-black";
     this.colorIndex = color;
     this.colorSet = colors[this.colorIndex];
 
@@ -32,37 +32,47 @@ module.exports = class Text extends THREE.Object3D {
     this.createText(this.font);
   }
 
-  animateIn () {
+  animateIn() {
     animate.to(this.materials[1].uniforms.alpha, 2.0, {
       value: 1,
       delay: this.animationDelay,
     });
     animate.to(this.materials[1], 2.0, {
-      opacity: 1
+      opacity: 1,
     });
     animate.to(this.materials[0], 0.2, {
       opacity: 0.4,
-      delay: this.animationDelay
+      delay: this.animationDelay,
     });
-    animate.fromTo(this.rotation, 2.0, {
-      x: -Math.PI / 2
-    }, {
-      x: 0,
-      ease: Elastic.easeOut,
-      delay: this.animationDelay
-    })
+    animate.fromTo(
+      this.rotation,
+      2.0,
+      {
+        x: -Math.PI / 2,
+      },
+      {
+        x: 0,
+        ease: Elastic.easeOut,
+        delay: this.animationDelay,
+      }
+    );
   }
 
-  animateOut () {
+  animateOut() {
     animate.to(this.materials[1].uniforms.alpha, 2.0, {
       value: 0,
     });
-    animate.fromTo(this.rotation, 2.0, {
-      x: 0
-    }, {
-      x: -Math.PI / 2,
-      ease: Expo.easeOut,
-    })
+    animate.fromTo(
+      this.rotation,
+      2.0,
+      {
+        x: 0,
+      },
+      {
+        x: -Math.PI / 2,
+        ease: Expo.easeOut,
+      }
+    );
   }
 
   createText(font) {
@@ -70,13 +80,17 @@ module.exports = class Text extends THREE.Object3D {
     const options = {
       font: font,
       size: 0.8,
-      height: 0.4
+      height: 0.4,
     };
 
     this.textGeo = new THREE.TextGeometry(text, options);
 
     this.materials = [
-      new THREE.MeshBasicMaterial({color: 0xFFFFFF, transparent: true, opacity: 0}), // front
+      new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0,
+      }), // front
       new LiveShaderMaterial(honeyShader, {
         transparent: true,
         wireframe: true,
@@ -85,15 +99,12 @@ module.exports = class Text extends THREE.Object3D {
           alpha: { value: 0 },
           time: { value: 0 },
           colorA: { value: new THREE.Color(this.colorSet[0]) },
-          colorB: { value: new THREE.Color(this.colorSet[1]) }
-        }
-      })
+          colorB: { value: new THREE.Color(this.colorSet[1]) },
+        },
+      }),
     ];
 
-    this.mesh = new THREE.Mesh(
-      this.textGeo,
-      this.materials
-    );
+    this.mesh = new THREE.Mesh(this.textGeo, this.materials);
 
     // compute sizes
     this.textGeo.computeBoundingBox();
@@ -128,7 +139,7 @@ module.exports = class Text extends THREE.Object3D {
     this.add(this.mesh);
   }
 
-  update (dt = 0, time = 0) {
+  update(dt = 0, time = 0) {
     if (this.materials) {
       this.materials[1].uniforms.time.value = time * 0.5;
     }

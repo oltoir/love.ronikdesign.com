@@ -1,81 +1,95 @@
 /** @jsx h */
-const { h, Component } = require('preact');
-const BaseComponent = require('../../components/BaseComponent/BaseComponent');
-const classnames = require('classnames');
-const animate = require('@jam3/gsap-promise');
-const Button = require('../../components/Button/Button');
-const Controls = require('../../components/Controls/Controls');
-const Icon = require('../../components/Icon/Icon');
-const Logo = require('../../components/Logo/Logo');
-const ReactGA = require('react-ga');
+const { h, Component } = require("preact");
+const BaseComponent = require("../../components/BaseComponent/BaseComponent");
+const classnames = require("classnames");
+const animate = require("@jam3/gsap-promise");
+const Button = require("../../components/Button/Button");
+const Controls = require("../../components/Controls/Controls");
+const Icon = require("../../components/Icon/Icon");
+const Logo = require("../../components/Logo/Logo");
+const ReactGA = require("react-ga");
 
 class Landing extends BaseComponent {
-  constructor (props) {
+  constructor(props) {
     super(props);
   }
 
-  animateIn () {
+  animateIn() {
     this.logo.animateIn({ delay: 4 });
     this.muteButton.animateIn({ delay: 4.2 });
     this.shuffleButton.animateIn({ delay: 4.3 });
     this.shareButton.animateIn({ delay: 4.4 });
   }
 
-  animateOut () {
+  animateOut() {
     // return Promise.all([
     //   this.shareButton.animateOut(),
     //   this.shuffleButton.animateOut()
     // ]);
   }
 
-  handleShuffle () {
+  handleShuffle() {
     this.props.updateMessage();
     ReactGA.event({
-      category: 'button',
-      action: 'click',
-      label: 'randomize'
+      category: "button",
+      action: "click",
+      label: "randomize",
     });
   }
 
-  handleShare () {
-    this.props.updateContent('Share');
+  handleShare() {
+    this.props.updateContent("Share");
     ReactGA.event({
-      category: 'button',
-      action: 'click',
-      label: 'spread the love'
+      category: "button",
+      action: "click",
+      label: "spread the love",
     });
   }
 
-  render () {
+  render() {
     const classes = classnames({
-      'Landing': true
+      Landing: true,
     });
     return (
-      <div className={classes} ref={ c => { this.container = c; } }>
-        <Logo ref={c => {this.logo = c; }}/>
+      <div
+        className={classes}
+        ref={(c) => {
+          this.container = c;
+        }}
+      >
+        <Logo
+          ref={(c) => {
+            this.logo = c;
+          }}
+        />
         <Controls>
           <div className="ControlsGroup">
             <Button
               onClick={() => this.props.toggleMusic()}
-              ref={ c => { this.muteButton = c; } }
-              icon='sound'
-              extraClasses={{muted: this.props.isMuted}}
+              ref={(c) => {
+                this.muteButton = c;
+              }}
+              icon="sound"
+              extraClasses={{ muted: this.props.isMuted }}
             />
           </div>
           <div className="ControlsGroup">
             <Button
               onClick={() => this.handleShuffle()}
-              ref={c => { this.shuffleButton = c;}}
-              icon='random'
-              extraClasses={{primary: true}}
+              ref={(c) => {
+                this.shuffleButton = c;
+              }}
+              icon="random"
+              extraClasses={{ primary: true }}
             />
             <Button
               onClick={() => this.handleShare()}
-              ref={ c => { this.shareButton = c; } }
-              icon='share'
+              ref={(c) => {
+                this.shareButton = c;
+              }}
               expanded
             >
-              Spread the love
+              Continue
             </Button>
           </div>
         </Controls>
@@ -85,7 +99,7 @@ class Landing extends BaseComponent {
 }
 
 Landing.defaultProps = {
-  onMaterialSwap: () => {}
+  onMaterialSwap: () => {},
 };
 
 module.exports = Landing;
